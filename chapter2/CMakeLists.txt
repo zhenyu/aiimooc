@@ -14,10 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
 )
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-
+#find_package(PCL 1.3 REQUIRED)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -48,7 +45,7 @@ generate_dynamic_reconfigure_options(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-   INCLUDE_DIRS include
+#  INCLUDE_DIRS include
 #  LIBRARIES chapter2
 #  CATKIN_DEPENDS pcl_ros roscpp sensor_msgs
 #  DEPENDS system_lib

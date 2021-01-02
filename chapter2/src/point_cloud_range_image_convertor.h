@@ -1,12 +1,12 @@
-#include <sensor_msgs/PointCloud2.h>
-
 #include <Eigen/Geometry>
+#include <pcl/visualization/range_image_visualizer.h>
+#include <sensor_msgs/PointCloud2.h>
 
 #ifndef _ZHENYU_SHA_AIIMOOC_POINT_CLOUD_CONVERTOR_H
 #define _ZHENYU_SHA_AIIMOOC_POINT_CLOUD_CONVERTOR_H
 class PointCloudConvertor {
  public:
-  PointCloudConvertor();
+  PointCloudConvertor(pcl::visualization::RangeImageVisualizer&);
   void RecvPointCloudCallBack(const sensor_msgs::PointCloud2::ConstPtr&);
 
  private:

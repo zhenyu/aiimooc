@@ -5,7 +5,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 
-PointCloudConvertor::PointCloudConvertor() {
+PointCloudConvertor::PointCloudConvertor(pcl::visualization::RangeImageVisualizer& rangeImageWidget) {
   angularResolution =
       (float)(1.0f * (M_PI / 180.0f));                //   1.0 degree in radians
   maxAngleWidth = (float)(360.0f * (M_PI / 180.0f));  // 360.0 degree in radians
