@@ -17,5 +17,6 @@ class PointCloudConvertor {
   float noiseLevel;
   float minRange;
   int borderSize;
+  pcl::visualization::RangeImageVisualizer& widget;
 };
 #endif
