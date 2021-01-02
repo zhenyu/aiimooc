@@ -12,8 +12,8 @@ PointCloudConvertor::PointCloudConvertor(
       maxAngleHeight(180.0f),  // 180.0 degree in radians
       sensorPose((Eigen::Affine3f)Eigen::Translation3f(0.0f, 0.0f, 0.0f)),
       widget(rangeImageWidget) {
-      sensorPose.rotate(
-        Eigen::AngleAxisf(pcl::deg2rad(180.0f), Eigen::Vector3f::UnitZ()));  
+  sensorPose.rotate(
+      Eigen::AngleAxisf(pcl::deg2rad(180.0f), Eigen::Vector3f::UnitZ()));
 }
 
 void PointCloudConvertor::RecvPointCloudCallBack(
@@ -24,12 +24,13 @@ void PointCloudConvertor::RecvPointCloudCallBack(
 
   // from xyz to range
   pcl::RangeImage rangeImage;
-  rangeImage.createFromPointCloud(pclCloud, pcl::deg2rad(angularResolution),
-                                  pcl::deg2rad(maxAngleWidth),
-                                  pcl::deg2rad(maxAngleHeight), 
-                                  sensorPose,
-                                  pcl::RangeImage::LASER_FRAME, 
-                                  0.00, 0.0f, 1);
+  {
+    std::lock_guard<std::mutex> lock(lock_);
+    rangeImage.createFromPointCloud(
+        pclCloud, pcl::deg2rad(angularResolution), pcl::deg2rad(maxAngleWidth),
+        pcl::deg2rad(maxAngleHeight), sensorPose, pcl::RangeImage::LASER_FRAME,
+        0.00, 0.0f, 1);
+  }
 
   // Show
   widget.showRangeImage(rangeImage);
@@ -40,9 +41,7 @@ void PointCloudConvertor::OnDynamicConfigChange(chapter2::CameraConfig& config,
   angularResolution = config.ang_res;
   maxAngleWidth = config.max_ang_w;
   maxAngleHeight = config.max_ang_h;
-  /*
+  std::lock_guard<std::mutex> lock(lock_);
   float theta = pcl::deg2rad(config.theta_ViewPort);
-  sensorPose.rotate(
-      Eigen::AngleAxisf(theta, Eigen::Vector3f::UnitZ()));  
-  */    
+  sensorPose.rotate(Eigen::AngleAxisf(theta, Eigen::Vector3f::UnitZ()));
 }

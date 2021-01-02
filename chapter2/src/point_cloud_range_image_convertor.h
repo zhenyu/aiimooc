@@ -1,10 +1,10 @@
-#include <atomic>
-
-#include <chapter2/CameraConfig.h> 
-#include <Eigen/Geometry>
+#include <chapter2/CameraConfig.h>
 #include <pcl/visualization/range_image_visualizer.h>
 #include <sensor_msgs/PointCloud2.h>
 
+#include <Eigen/Geometry>
+#include <atomic>
+#include <mutex>
 
 #ifndef _ZHENYU_SHA_AIIMOOC_POINT_CLOUD_CONVERTOR_H
 #define _ZHENYU_SHA_AIIMOOC_POINT_CLOUD_CONVERTOR_H
@@ -18,6 +18,7 @@ class PointCloudConvertor {
   std::atomic<float> angularResolution;
   std::atomic<float> maxAngleWidth;
   std::atomic<float> maxAngleHeight;
+  std::mutex lock_;
   Eigen::Affine3f sensorPose;
   pcl::visualization::RangeImageVisualizer& widget;
 };
