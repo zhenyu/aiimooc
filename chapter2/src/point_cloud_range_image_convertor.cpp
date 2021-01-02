@@ -7,17 +7,16 @@
 
 PointCloudConvertor::PointCloudConvertor(
     pcl::visualization::RangeImageVisualizer& rangeImageWidget)
-    : widget(rangeImageWidget) {
-  angularResolution =
-      (float)(0.2f * (M_PI / 180.0f));                //   1.0 degree in radians
-  maxAngleWidth = (float)(360.0f * (M_PI / 180.0f));  // 360.0 degree in radians
-  maxAngleHeight =
-      (float)(180.0f * (M_PI / 180.0f));  // 180.0 degree in radians
-  sensorPose = (Eigen::Affine3f)Eigen::Translation3f(0.0f, 0.0f, 0.0f);
-  noiseLevel = 0.00;
-  minRange = 0.0f;
-  borderSize = 1;
-}
+    : angularResolution(
+          (float)(0.2f * (M_PI / 180.0f))),  //   1.0 degree in radians
+      maxAngleWidth(
+          (float)(360.0f * (M_PI / 180.0f))),  // 360.0 degree in radians
+      maxAngleHeight((float)(180.0f * (M_PI / 180.0f))),// 180.0 degree in radians
+      sensorPose((Eigen::Affine3f)Eigen::Translation3f(0.0f, 0.0f, 0.0f)),
+      noiseLevel(0.00),
+      minRange (0.0f),
+      borderSize(1),
+      widget(rangeImageWidget) {}
 
 void PointCloudConvertor::RecvPointCloudCallBack(
     const sensor_msgs::PointCloud2::ConstPtr& pc2Msg) {
@@ -34,3 +33,6 @@ void PointCloudConvertor::RecvPointCloudCallBack(
   // Show
   widget.showRangeImage(rangeImage);
 }
+
+void PointCloudConvertor::OnDynamicConfigChange(chapter2::CameraConfig& config,
+                                                uint32_t level) {}
