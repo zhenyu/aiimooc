@@ -7,16 +7,14 @@
 
 PointCloudConvertor::PointCloudConvertor(
     pcl::visualization::RangeImageVisualizer& rangeImageWidget)
-    : angularResolution(
-          (float)(0.2f * (M_PI / 180.0f))),  //   1.0 degree in radians
-      maxAngleWidth(
-          (float)(360.0f * (M_PI / 180.0f))),  // 360.0 degree in radians
-      maxAngleHeight((float)(180.0f * (M_PI / 180.0f))),// 180.0 degree in radians
+    : angularResolution(0.5f),
+      maxAngleWidth(360.0f),   // 360.0 degree in radians
+      maxAngleHeight(180.0f),  // 180.0 degree in radians
       sensorPose((Eigen::Affine3f)Eigen::Translation3f(0.0f, 0.0f, 0.0f)),
-      noiseLevel(0.00),
-      minRange (0.0f),
-      borderSize(1),
-      widget(rangeImageWidget) {}
+      widget(rangeImageWidget) {
+      sensorPose.rotate(
+        Eigen::AngleAxisf(pcl::deg2rad(180.0f), Eigen::Vector3f::UnitZ()));  
+}
 
 void PointCloudConvertor::RecvPointCloudCallBack(
     const sensor_msgs::PointCloud2::ConstPtr& pc2Msg) {
@@ -26,13 +24,25 @@ void PointCloudConvertor::RecvPointCloudCallBack(
 
   // from xyz to range
   pcl::RangeImage rangeImage;
-  rangeImage.createFromPointCloud(
-      pclCloud, angularResolution, maxAngleWidth, maxAngleHeight, sensorPose,
-      pcl::RangeImage::LASER_FRAME, noiseLevel, minRange, borderSize);
+  rangeImage.createFromPointCloud(pclCloud, pcl::deg2rad(angularResolution),
+                                  pcl::deg2rad(maxAngleWidth),
+                                  pcl::deg2rad(maxAngleHeight), 
+                                  sensorPose,
+                                  pcl::RangeImage::LASER_FRAME, 
+                                  0.00, 0.0f, 1);
 
   // Show
   widget.showRangeImage(rangeImage);
 }
 
 void PointCloudConvertor::OnDynamicConfigChange(chapter2::CameraConfig& config,
-                                                uint32_t level) {}
+                                                uint32_t level) {
+  angularResolution = config.ang_res;
+  maxAngleWidth = config.max_ang_w;
+  maxAngleHeight = config.max_ang_h;
+  /*
+  float theta = pcl::deg2rad(config.theta_ViewPort);
+  sensorPose.rotate(
+      Eigen::AngleAxisf(theta, Eigen::Vector3f::UnitZ()));  
+  */    
+}
