@@ -6,6 +6,7 @@
 #define _ZHENYU_SHA_AIIMOOC_POINT_CLOUD_CONVERTOR_H
 class PointCloudConvertor {
  public:
+  PointCloudConvertor();
   void RecvPointCloudCallBack(const sensor_msgs::PointCloud2::ConstPtr&);
 
  private:
