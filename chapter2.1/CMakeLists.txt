@@ -35,3 +35,11 @@ target_link_libraries(range_image
 )
 
 add_dependencies(range_image ${PROJECT_NAME}_gencfg)  # dynamic reconfigure 新加的依赖
+
+add_executable(eigenfeature src/eigenfeature.cpp src/eigen_caculator.cpp)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(eigenfeature
+   ${catkin_LIBRARIES}
+   ${PCL_LIBRARIES}
+)
