@@ -1,4 +1,4 @@
-#include <aiimooc_2_1_zhenyusha/CameraConfig.h>
+#include <aiimooc_szy/CameraConfig.h>
 #include <pcl/visualization/range_image_visualizer.h>
 #include <sensor_msgs/PointCloud2.h>
 
@@ -12,7 +12,7 @@ class PointCloudConvertor {
  public:
   PointCloudConvertor(pcl::visualization::RangeImageVisualizer&);
   void RecvPointCloudCallBack(const sensor_msgs::PointCloud2::ConstPtr&);
-  void OnDynamicConfigChange(aiimooc_2_1_zhenyusha::CameraConfig&, uint32_t);
+  void OnDynamicConfigChange(aiimooc_szy::CameraConfig&, uint32_t);
 
  private:
   std::atomic<float> angularResolution;

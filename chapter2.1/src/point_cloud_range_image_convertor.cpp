@@ -36,7 +36,7 @@ void PointCloudConvertor::RecvPointCloudCallBack(
   widget.showRangeImage(rangeImage);
 }
 
-void PointCloudConvertor::OnDynamicConfigChange(aiimooc_2_1_zhenyusha::CameraConfig& config,
+void PointCloudConvertor::OnDynamicConfigChange(aiimooc_szy::CameraConfig& config,
                                                 uint32_t level) {
   angularResolution = config.ang_res;
   maxAngleWidth = config.max_ang_w;

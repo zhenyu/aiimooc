@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(aiimooc_2_1_zhenyusha)
+project(aiimooc_szy)
 
 add_compile_options(-std=c++11)
 
