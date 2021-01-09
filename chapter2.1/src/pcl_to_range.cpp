@@ -6,7 +6,7 @@
 #include <ros/ros.h>  
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "pcl_to_range");
+  ros::init(argc, argv, "range_image");
   ros::NodeHandle n;
   pcl::visualization::RangeImageVisualizer viewer ("Range image");
   PointCloudConvertor convertor(viewer);
