@@ -1,4 +1,4 @@
-#include <chapter2/CameraConfig.h>
+#include <chapter2.1/CameraConfig.h>
 #include <pcl/visualization/range_image_visualizer.h>
 #include <sensor_msgs/PointCloud2.h>
 

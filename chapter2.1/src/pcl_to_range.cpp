@@ -1,6 +1,6 @@
 #include "point_cloud_range_image_convertor.h"
 
-#include <chapter2/CameraConfig.h> 
+#include <chapter2.1/CameraConfig.h> 
 #include <dynamic_reconfigure/server.h>
 #include <pcl/visualization/range_image_visualizer.h>
 #include <ros/ros.h>  
