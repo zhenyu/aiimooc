@@ -2,6 +2,7 @@
 
 #include <Eigen/Dense>
 #include <pcl/point_cloud.h>
+#include <pcl/common/centroid.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl_conversions/pcl_conversions.h>
 
@@ -17,6 +18,9 @@ static void Compute(const pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud, const pcl:
   {
     pointIdxNKNSearch.push_back(index);
     Eigen::Matrix <double, 4, 1> centroid;
+    pcl::compute3DCentroid (*cloud, pointIdxNKNSearch, centroid);
+    Eigen::Matrix< double, 3, 3 > covariance_matrix;
+    pcl::computeCovarianceMatrix (*cloud, pointIdxNKNSearch, centroid, covariance_matrix);
   }
 
 }
