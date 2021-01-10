@@ -28,15 +28,15 @@ static void Compute(const pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud, const pcl:
     Eigen::Vector3d::Index maxRow, minRow, maxCol, minCol;
     eigenvals.minCoeff(&minRow, &minCol);
     eigenvals.maxCoeff(&maxRow, &maxCol);
-
+    ROS_DEBUG_STREAM("max="<<maxRow<<", min="<<minRow<<", midle="<<3-minRow-maxRow);
     double l1 = eigenvals(maxRow);
     double l3 = eigenvals(minRow);
-    double l2 =  eigenvals(3-minRow-maxRow);
+    double l2 =  eigenvals( minRow==maxRow? maxRow: 3-minRow-maxRow);
     double l = l1+l2+l3;
     double e1 = l1/l;
     double e2 = l2/l;
     double e3 = l3/l;
-    fs<<"====== number "<<index<<"point============="<<std::endl;
+    fs<<"====== number "<<index<<" point============="<<std::endl;
     fs<<"L="<<(l1-l2)/l1<<std::endl;
     fs<<"p="<<(l2-l3)/l1<<std::endl;
     fs<<"S="<<l3/l1<<std::endl;
@@ -53,9 +53,10 @@ void EigenCaculator::RecvPointCloudCallBack(
   pcl::fromROSMsg(*pc2Msg, pclCloud);
   static bool first = true;
   if(first){
-      size_t len = pclCloud.points.size();
+      auto len = pclCloud.points.size();
+      ROS_INFO_STREAM(len << " points\n");
       const pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_ptr (&pclCloud);
-      std::ofstream fs("eigentfeature.txt", std::ios::app);
+      std::ofstream fs("eigentfeature.txt");
       for(int i=0;i<len;i++){
         pcl::PointXYZ& point =  pclCloud.points[i];
         if(std::isfinite(point.x)&&std::isfinite(point.y)&&std::isfinite(point.z)) {
@@ -63,11 +64,11 @@ void EigenCaculator::RecvPointCloudCallBack(
         }
       }
       fs.close();
-      ROS_INFO("first frame done");
+      ROS_INFO("first frame done\n");
       first= false;
   } else
   {
-      ROS_INFO("ignore");
+      ROS_INFO("ignore\n");
   }
   
 }
