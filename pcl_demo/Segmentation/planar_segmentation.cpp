@@ -3,9 +3,6 @@
 基于随机采样一致性
 */
 #include <iostream>
-#include <thread>
-#include <memory>
-
 #include <pcl/ModelCoefficients.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
@@ -14,9 +11,7 @@
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/visualization/pcl_visualizer.h>     // 可视化
 #include <pcl/filters/extract_indices.h>//按索引提取点云
-
-
-using namespace std::chrono_literals;
+#include <boost/make_shared.hpp>
 int
  main (int argc, char** argv)
 {
@@ -91,7 +86,7 @@ int
 
 //按照索引提取点云　　内点
   pcl::ExtractIndices<pcl::PointXYZ> extract_indices;//索引提取器
-  extract_indices.setIndices (std::make_shared<const pcl::PointIndices> (*inliers));//设置索引
+  extract_indices.setIndices (boost::make_shared<const pcl::PointIndices> (*inliers));//设置索引
   extract_indices.setInputCloud (cloud);//设置输入点云
   pcl::PointCloud<pcl::PointXYZ>::Ptr output (new pcl::PointCloud<pcl::PointXYZ>);
   extract_indices.filter (*output);//提取对于索引的点云 内点
@@ -118,7 +113,7 @@ int
 
     while (!viewer.wasStopped()){
         viewer.spinOnce(100);
-        std::this_thread::sleep_for(100000ms);
+        boost::this_thread::sleep(boost::posix_time::microseconds(100000));
     }
 
   return (0);

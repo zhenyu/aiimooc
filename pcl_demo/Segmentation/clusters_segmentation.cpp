@@ -9,7 +9,6 @@ PCL中实现欧式聚类提取。
    4. 欧式聚类　提取出我们想要识别的东西
 
 */
-#include <thread>
 
 #include <pcl/ModelCoefficients.h>//模型系数
 #include <pcl/point_types.h>//点云基本类型
@@ -23,7 +22,6 @@ PCL中实现欧式聚类提取。
 #include <pcl/segmentation/sac_segmentation.h>//随机采用分割
 #include <pcl/segmentation/extract_clusters.h>//欧式聚类分割
 #include <pcl/visualization/pcl_visualizer.h> // 可视化
-
 
 /******************************************************************************
  打开点云数据，并对点云进行滤波重采样预处理，然后采用平面分割模型对点云进行分割处理
@@ -141,8 +139,7 @@ main (int argc, char** argv)
 
     while (!viewer.wasStopped()){
         viewer.spinOnce(100);
-        using namespace std::chrono_literals;
-        std::this_thread::sleep_for(100000ms);
+        boost::this_thread::sleep(boost::posix_time::microseconds(100000));
     }
 
 

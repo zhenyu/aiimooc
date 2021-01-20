@@ -32,7 +32,7 @@ main (int, char**)
   indices.indices.push_back (2);
 
   pcl::ExtractIndices<PointType> extract_indices;//索引提取器
-  extract_indices.setIndices (std::make_shared<const pcl::PointIndices> (indices));//设置索引
+  extract_indices.setIndices (boost::make_shared<const pcl::PointIndices> (indices));//设置索引
   extract_indices.setInputCloud (cloud);//设置输入点云
   pcl::PointCloud<pcl::PointXYZ>::Ptr output (new pcl::PointCloud<pcl::PointXYZ>);
   extract_indices.filter (*output);//提取对于索引的点云

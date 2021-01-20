@@ -15,8 +15,7 @@
 #include <pcl/sample_consensus/model_types.h>
 #include <pcl/segmentation/sac_segmentation.h>//随机采用分割
 #include <pcl/visualization/pcl_visualizer.h> // 可视化
-#include<thread>
-using namespace std::chrono_literals;
+
 typedef pcl::PointXYZ PointT;
 int main (int argc, char** argv)
 {
@@ -134,7 +133,7 @@ int main (int argc, char** argv)
 
     while (!viewer.wasStopped()){
         viewer.spinOnce(100);
-        std::this_thread::sleep_for(100000ms);
+        boost::this_thread::sleep(boost::posix_time::microseconds(100000));
     }
 
   return (0);

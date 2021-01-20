@@ -60,7 +60,7 @@ main (int argc, char** argv)
     return (-1);
   }
  //设置搜索的方式或者说是结构　kd树　搜索
-  pcl::search::Search<pcl::PointXYZ>::Ptr tree = std::shared_ptr<pcl::search::Search<pcl::PointXYZ> > (new pcl::search::KdTree<pcl::PointXYZ>);
+  pcl::search::Search<pcl::PointXYZ>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZ> > (new pcl::search::KdTree<pcl::PointXYZ>);
    //求法线　和　曲率　
   pcl::PointCloud <pcl::Normal>::Ptr normals (new pcl::PointCloud <pcl::Normal>);
   pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;

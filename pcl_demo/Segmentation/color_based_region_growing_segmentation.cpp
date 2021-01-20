@@ -18,7 +18,7 @@
 （2）合并，聚类之间的色差小于色差阀值和并为一个聚类，
 　　且当前聚类中点的数量小于聚类点数量的与最近的聚类合并在一起
 */
-#include <thread>
+
 #include <iostream>
 #include <vector>
 #include <pcl/point_types.h>
@@ -28,12 +28,12 @@
 #include <pcl/visualization/cloud_viewer.h>//可视化
 #include <pcl/filters/passthrough.h>//直通滤波器
 #include <pcl/segmentation/region_growing_rgb.h>//基于颜色的区域增长点云分割算法
-using namespace std::chrono_literals;
+
 int
 main (int argc, char** argv)
 {
   // 搜索算法
-  pcl::search::Search <pcl::PointXYZRGB>::Ptr tree = std::shared_ptr<pcl::search::Search<pcl::PointXYZRGB> > (new pcl::search::KdTree<pcl::PointXYZRGB>);
+  pcl::search::Search <pcl::PointXYZRGB>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZRGB> > (new pcl::search::KdTree<pcl::PointXYZRGB>);
   //点云的类型
   pcl::PointCloud <pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud <pcl::PointXYZRGB>);
   if ( pcl::io::loadPCDFile <pcl::PointXYZRGB> ("../region_growing_rgb_tutorial.pcd", *cloud) == -1 )
@@ -67,7 +67,7 @@ main (int argc, char** argv)
   viewer.showCloud (colored_cloud);
   while (!viewer.wasStopped ())
   {
-    std::this_thread::sleep_for(100ms);
+    boost::this_thread::sleep (boost::posix_time::microseconds (100));
   }
 
   return (0);

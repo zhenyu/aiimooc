@@ -18,19 +18,19 @@
 #include <pcl/sample_consensus/sac_model_plane.h> // 平面模型
 #include <pcl/sample_consensus/sac_model_sphere.h>// 球模型
 #include <pcl/visualization/pcl_visualizer.h>     // 可视化
-#include <thread>
-using namespace std::chrono_literals;
+#include <boost/thread/thread.hpp>
+
 /*
 输入点云
 返回一个可视化的对象
 */
-std::shared_ptr<pcl::visualization::PCLVisualizer>
+boost::shared_ptr<pcl::visualization::PCLVisualizer>
 simpleVis (pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud)
 {
   // --------------------------------------------
   // -----打开3维可视化窗口 加入点云----
   // --------------------------------------------
-  std::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+  boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
   viewer->setBackgroundColor (0, 0, 0);//背景颜色 黑se
   viewer->addPointCloud<pcl::PointXYZ> (cloud, "sample cloud");//添加点云
   viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");//点云对象大小
@@ -110,7 +110,7 @@ main(int argc, char** argv)
   pcl::copyPointCloud<pcl::PointXYZ>(*cloud, inliers, *final1);
 
   // 创建可视化对象并加入原始点云或者所有的局内点
-  std::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
+  boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   if (pcl::console::find_argument (argc, argv, "-f") >= 0 || pcl::console::find_argument (argc, argv, "-sf") >= 0)
     viewer = simpleVis(final1);
   else
@@ -118,7 +118,7 @@ main(int argc, char** argv)
   while (!viewer->wasStopped ())
   {
     viewer->spinOnce (100);
-    std::this_thread::sleep_for (100000ms);
+    boost::this_thread::sleep (boost::posix_time::microseconds (100000));
   }
   return 0;
  }
