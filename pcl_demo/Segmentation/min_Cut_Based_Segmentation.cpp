@@ -107,7 +107,7 @@ main(int argc, char** argv)
         if (cluster->points.size() <= 0)
             break;
         std::cout << "Cluster " << currentClusterNum << " has " << cluster->points.size() << " points." << std::endl;
-        std::string fileName = "cluster" + boost::to_string(currentClusterNum) + ".pcd";
+        std::string fileName = "cluster" + std::to_string(currentClusterNum) + ".pcd";
         pcl::io::savePCDFileASCII(fileName, *cluster);
 
         currentClusterNum++;

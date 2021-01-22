@@ -21,6 +21,8 @@
 
 #include <iostream>
 #include <vector>
+#include <thread>
+
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/search/search.h>
@@ -67,7 +69,8 @@ main (int argc, char** argv)
   viewer.showCloud (colored_cloud);
   while (!viewer.wasStopped ())
   {
-    boost::this_thread::sleep (boost::posix_time::microseconds (100));
+     using namespace std::chrono_literals;
+    std::this_thread::sleep_for (100ms);
   }
 
   return (0);

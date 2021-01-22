@@ -10,6 +10,7 @@
 
 */
 #include <iostream>
+#include <thread>
 #include <pcl/console/parse.h>
 #include <pcl/filters/extract_indices.h>          // 由索引提取点云
 #include <pcl/io/pcd_io.h>
@@ -118,7 +119,8 @@ main(int argc, char** argv)
   while (!viewer->wasStopped ())
   {
     viewer->spinOnce (100);
-    boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+     using namespace std::chrono_literals;
+   std::this_thread::sleep_for (100000ms);
   }
   return 0;
  }

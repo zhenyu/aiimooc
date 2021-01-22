@@ -2,7 +2,10 @@
 平面模型分割
 基于随机采样一致性
 */
+
 #include <iostream>
+#include <thread>
+
 #include <pcl/ModelCoefficients.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
@@ -113,7 +116,8 @@ int
 
     while (!viewer.wasStopped()){
         viewer.spinOnce(100);
-        boost::this_thread::sleep(boost::posix_time::microseconds(100000));
+         using namespace std::chrono_literals;
+       std::this_thread::sleep_for(100000ms);
     }
 
   return (0);

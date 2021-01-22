@@ -5,6 +5,8 @@
 实现圆柱体模型的分割：
 采用随机采样一致性估计从带有噪声的点云中提取一个圆柱体模型。
 */
+#include <thread>
+
 #include <pcl/ModelCoefficients.h>//模型系数
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
@@ -133,7 +135,8 @@ int main (int argc, char** argv)
 
     while (!viewer.wasStopped()){
         viewer.spinOnce(100);
-        boost::this_thread::sleep(boost::posix_time::microseconds(100000));
+         using namespace std::chrono_literals;
+       std::this_thread::sleep_for(100000ms);
     }
 
   return (0);

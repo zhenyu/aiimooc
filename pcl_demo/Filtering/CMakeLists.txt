@@ -7,7 +7,7 @@ project( pcl_filter )
 #模式
 set( CMAKE_BUILD_TYPE Release )
 # 添加c++ 11标准支持
-set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
+set( CMAKE_CXX_FLAGS "-std=c++14 -O3" )
 
 #找 pcl 并链接 
 #注意　common io filters visualization　分别为其子模块，

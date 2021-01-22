@@ -9,6 +9,7 @@ PCL中实现欧式聚类提取。
    4. 欧式聚类　提取出我们想要识别的东西
 
 */
+#include<thread>
 
 #include <pcl/ModelCoefficients.h>//模型系数
 #include <pcl/point_types.h>//点云基本类型
@@ -139,7 +140,8 @@ main (int argc, char** argv)
 
     while (!viewer.wasStopped()){
         viewer.spinOnce(100);
-        boost::this_thread::sleep(boost::posix_time::microseconds(100000));
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(100ms);
     }
 
 

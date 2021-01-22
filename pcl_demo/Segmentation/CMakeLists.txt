@@ -7,12 +7,12 @@ project( segmentation )
 #模式
 set( CMAKE_BUILD_TYPE Release )
 # 添加c++ 11标准支持
-set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
+set( CMAKE_CXX_FLAGS "-std=c++14 -O3" )
 
 #找 pcl 并链接 
 #注意　common io filters visualization　keypoints 分别为其子模块，
 # 使用到子模块的需要添加相应的子模块
-find_package( PCL REQUIRED COMPONENT io common visualization filters segmentation filters)
+find_package( PCL REQUIRED COMPONENT io common visualization filters segmentation)
 include_directories( ${PCL_INCLUDE_DIRS} )
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions( ${PCL_DEFINITIONS} )
