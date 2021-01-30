@@ -119,7 +119,7 @@ int
       cloud_out->points[i].y << " " << cloud_out->points[i].z << std::endl;
 
   pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;//创建IterativeClosestPoint的对象
-  icp.setInputCloud(cloud_in);                 //cloud_in设置为点云的源点
+  icp.setInputSource(cloud_in);                 //cloud_in设置为点云的源点
   icp.setInputTarget(cloud_out);               //cloud_out设置为与cloud_in对应的匹配目标
   pcl::PointCloud<pcl::PointXYZ> Final;        //存储经过配准变换点云后的点云
   icp.align(Final);  

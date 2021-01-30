@@ -227,7 +227,7 @@ void pairAlign (const PointCloud::Ptr cloud_src, const PointCloud::Ptr cloud_tgt
   // Note: adjust this based on the size of your datasets
   reg.setMaxCorrespondenceDistance (0.1);// 10cm大于此值的点对不考虑
   // 设置点表示
-  reg.setPointRepresentation (boost::make_shared<const MyPointRepresentation> (point_representation));
+  reg.setPointRepresentation (std::make_shared<const MyPointRepresentation> (point_representation));
 
   reg.setInputSource (points_with_normals_src);   // 设置源点云
   reg.setInputTarget (points_with_normals_tgt);   // 设置目标点云

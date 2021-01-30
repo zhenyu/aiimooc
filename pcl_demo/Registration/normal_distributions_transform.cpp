@@ -22,7 +22,7 @@
 #include <pcl/filters/approximate_voxel_grid.h>//滤波类头文件  （使用体素网格过滤器处理的效果比较好）
 
 #include <pcl/visualization/pcl_visualizer.h>
-#include <boost/thread/thread.hpp>
+#include <thread>
 
 int
 main (int argc, char** argv)
@@ -123,7 +123,8 @@ main (int argc, char** argv)
   while (!viewer_final->wasStopped ())
   {
     viewer_final->spinOnce (100);
-    boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for (100000ms);
   }
 
   return (0);
