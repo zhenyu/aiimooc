@@ -1,5 +1,4 @@
-#include <pcl/filters/voxel_grid.h>           //用于体素网格化的滤波类头文件
-#include <pcl/filters/filter.h>               //滤波相关头文件
+             //滤波相关头文件
 #include <pcl/features/normal_3d.h>           //法线特征头文件
 #include <pcl/registration/icp.h>             //ICP类相关头文件
 #include <pcl/registration/icp_nl.h>          //非线性ICP 相关头文件

@@ -3,6 +3,8 @@
 
 #include <pcl/point_types.h>                  //点类型定义头文件
 #include <pcl/point_cloud.h> 
+#include <pcl/filters/voxel_grid.h>           //用于体素网格化的滤波类头文件
+#include <pcl/filters/filter.h>  
 
 #ifndef _ZHENYU_SHA_AIIMOOC_ALIANER_H
 #define _ZHENYU_SHA_AIIMOOC_ALIANER_H
