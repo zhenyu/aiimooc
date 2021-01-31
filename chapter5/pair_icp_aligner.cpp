@@ -1,12 +1,12 @@
-             //滤波相关头文件
-#include <pcl/features/normal_3d.h>           //法线特征头文件
-#include <pcl/registration/icp.h>             //ICP类相关头文件
-#include <pcl/registration/icp_nl.h>          //非线性ICP 相关头文件
-#include <pcl/point_representation.h>         //点表示相关的头文件
+//滤波相关头文件
+#include <pcl/features/normal_3d.h>   //法线特征头文件
+#include <pcl/registration/icp.h>     //ICP类相关头文件
+#include <pcl/registration/icp_nl.h>  //非线性ICP 相关头文件
+#include <pcl/point_representation.h> //点表示相关的头文件
 
 #include "pair_icp_aligner.h"
 
-typedef pcl::PointNormal PointNormalT;      //　x,y,z＋法向量＋曲率　点
+typedef pcl::PointNormal PointNormalT; //　x,y,z＋法向量＋曲率　点
 // float x,y,z;   float normal[3] ,curvature ;
 typedef pcl::PointCloud<PointNormalT> PointCloudWithNormals; //带有法向量的点云
 
@@ -31,7 +31,12 @@ public:
   }
 };
 
-void PairICPAligner::align(const PointCloud::Ptr cloud_src, const PointCloud::Ptr cloud_tgt, PointCloud::Ptr output, Eigen::Matrix4f &final_transform, bool downsample) {
+void PairICPAligner::align(const PointCloud::Ptr cloud_src,
+                           const PointCloud::Ptr cloud_tgt,
+                           PointCloud::Ptr output,
+                           Eigen::Matrix4f &final_transform,
+                           bool downsample)
+{
   // Downsample for consistency and speed
   // \note enable this for large datasets
   PointCloud::Ptr src(new PointCloud); //存储滤波后的源点云
@@ -57,7 +62,7 @@ void PairICPAligner::align(const PointCloud::Ptr cloud_src, const PointCloud::Pt
   PointCloudWithNormals::Ptr points_with_normals_tgt(new PointCloudWithNormals);
 
   pcl::NormalEstimation<PointT, PointNormalT> norm_est; //点云法线估计对象
-      // 添加搜索算法 kdtree search  最近的几个点 估计平面 协方差矩阵PCA分解 求解法线
+                                                        // 添加搜索算法 kdtree search  最近的几个点 估计平面 协方差矩阵PCA分解 求解法线
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>());
   norm_est.setSearchMethod(tree);
   norm_est.setKSearch(30); // 指定临近点数量
@@ -115,8 +120,6 @@ void PairICPAligner::align(const PointCloud::Ptr cloud_src, const PointCloud::Pt
       reg.setMaxCorrespondenceDistance(reg.getMaxCorrespondenceDistance() - 0.001);
 
     prev = reg.getLastIncrementalTransformation(); //　
-
-    
   }
 
   //
@@ -129,5 +132,5 @@ void PairICPAligner::align(const PointCloud::Ptr cloud_src, const PointCloud::Pt
   //add the source to the transformed target
   *output += *cloud_src;
 
-  final_transform = targetToSource; 
+  final_transform = targetToSource;
 }

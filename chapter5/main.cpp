@@ -1,6 +1,6 @@
 #include <Eigen/Geometry>
-#include <pcl/io/pcd_io.h>                    //PCD文件打开存储类头文件
-#include <pcl/registration/transforms.h>      //变换矩阵类头文件
+#include <pcl/io/pcd_io.h>               //PCD文件打开存储类头文件
+#include <pcl/registration/transforms.h> //变换矩阵类头文件
 
 #include "aligner.h"
 
@@ -21,7 +21,6 @@ struct PCDComparator //文件比较处理
     return (p1.f_name < p2.f_name); //文件名是否相等　
   }
 };
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /** \brief Load a set of PCD files that we want to register together
@@ -57,7 +56,6 @@ void loadData(int argc, char **argv, std::vector<PCD, Eigen::aligned_allocator<P
   }
 }
 
-
 int main(int argc, char **argv)
 {
   // 存储管理所有打开的点云
@@ -75,9 +73,9 @@ int main(int argc, char **argv)
 
   PointCloud::Ptr result(new PointCloud), source, target;
   Eigen::Matrix4f GlobalTransform = Eigen::Matrix4f::Identity(), pairTransform;
-  
-  char * aligner_name = argv[1];
-  Aligner* aligner = Aligner::get_aligner(aligner_name);
+
+  char *aligner_name = argv[1];
+  Aligner *aligner = Aligner::get_aligner(aligner_name);
   for (size_t i = 1; i < data.size(); ++i) //循环处理所有点云
   {
     source = data[i - 1].cloud; // 连续配准
@@ -91,13 +89,12 @@ int main(int argc, char **argv)
 
     //把当前两两配准后的点云temp转化到全局坐标系下返回result
     pcl::transformPointCloud(*temp, *result, GlobalTransform);
-    
+
     //用当前的两组点云之间的变换更新全局变换
     GlobalTransform = GlobalTransform * pairTransform;
-
   }
   delete aligner;
   std::stringstream ss;
-  ss << "reg_" << aligner_name<< ".pcd";
-  pcl::io::savePCDFile(ss.str (), *result, true);
+  ss << "reg_" << aligner_name << ".pcd";
+  pcl::io::savePCDFile(ss.str(), *result, true);
 }

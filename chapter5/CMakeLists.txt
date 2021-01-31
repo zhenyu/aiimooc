@@ -18,5 +18,5 @@ link_directories(${PCL_LIBRARY_DIRS})
 add_definitions( ${PCL_DEFINITIONS} )
 
 # 使用ICP迭代最近点算法
-add_executable (contact main.cpp aligner.cpp pair_icp_aligner.cpp)
+add_executable (contact main.cpp aligner.cpp pair_icp_aligner.cpp ndt_aligner.cpp)
 target_link_libraries (contact ${PCL_LIBRARIES})
