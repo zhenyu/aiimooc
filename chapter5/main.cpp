@@ -34,7 +34,7 @@ void loadData(int argc, char **argv, std::vector<PCD, Eigen::aligned_allocator<P
 {
   std::string extension(".pcd");
   // 第一个参数是命令本身，所以要从第二个参数开始解析
-  for (int i = 1; i < argc; i++)
+  for (int i = 2; i < argc; i++)
   {
     std::string fname = std::string(argv[i]);
     // PCD文件名至少为5个字符大小字符串（因为后缀名.pcd就已经占了四个字符位置）
@@ -76,8 +76,8 @@ int main(int argc, char **argv)
   PointCloud::Ptr result(new PointCloud), source, target;
   Eigen::Matrix4f GlobalTransform = Eigen::Matrix4f::Identity(), pairTransform;
   
-  // TODO with arg
-  Aligner* aligner = Aligner::get_aligner("pair_icp");
+  char * aligner_name = argv[1];
+  Aligner* aligner = Aligner::get_aligner(aligner_name);
   for (size_t i = 1; i < data.size(); ++i) //循环处理所有点云
   {
     source = data[i - 1].cloud; // 连续配准
@@ -97,5 +97,7 @@ int main(int argc, char **argv)
 
   }
   delete aligner;
-  pcl::io::savePCDFile("icp.pcd", *result, true);
+  std::stringstream ss;
+  ss << "reg_" << aligner_name<< ".pcd";
+  pcl::io::savePCDFile(ss.str (), *result, true);
 }

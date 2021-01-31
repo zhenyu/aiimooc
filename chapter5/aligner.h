@@ -12,6 +12,8 @@
 typedef pcl::PointXYZ PointT;               // x,y,z点　
 typedef pcl::PointCloud<PointT> PointCloud; //点云　申明pcl::PointXYZ数据
 
+const std::string ICP_NAME ="icp";
+const std::string NDT_NAME = "ndt";
 class Aligner {
  public: 
   // TODO smart pointer

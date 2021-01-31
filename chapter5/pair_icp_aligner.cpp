@@ -97,7 +97,6 @@ void PairICPAligner::align(const PointCloud::Ptr cloud_src, const PointCloud::Pt
   reg.setMaximumIterations(2); ////设置最大的迭代次数，即每迭代两次就认为收敛，停止内部迭代
   for (int i = 0; i < 30; ++i) ////手动迭代，每手动迭代一次，在配准结果视口对迭代的最新结果进行刷新显示
   {
-    PCL_INFO("Iteration Nr. %d.\n", i);
 
     // 存储点云以便可视化
     points_with_normals_src = reg_result;
