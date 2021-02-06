@@ -20,4 +20,3 @@ add_definitions( ${PCL_DEFINITIONS} )
 
 add_executable (feature_reg main.cpp)
 target_link_libraries (feature_reg ${PCL_LIBRARIES})
-
