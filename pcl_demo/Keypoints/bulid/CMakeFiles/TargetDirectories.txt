@@ -1,0 +1,4 @@
+/Users/zhenyusha/workspace/aiimooc/pcl_demo/Keypoints/bulid/CMakeFiles/rebuild_cache.dir
+/Users/zhenyusha/workspace/aiimooc/pcl_demo/Keypoints/bulid/CMakeFiles/edit_cache.dir
+/Users/zhenyusha/workspace/aiimooc/pcl_demo/Keypoints/bulid/CMakeFiles/harris3d.dir
+/Users/zhenyusha/workspace/aiimooc/pcl_demo/Keypoints/bulid/CMakeFiles/narf_kp_extr.dir
