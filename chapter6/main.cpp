@@ -14,22 +14,56 @@
 #include <pcl/visualization/pcl_visualizer.h>
 
 // Types
-typedef pcl::PointNormal PointNT;
-typedef pcl::PointCloud<PointNT> PointCloudT;
-typedef pcl::FPFHSignature33 FeatureT;
-typedef pcl::FPFHEstimationOMP<PointNT, PointNT, FeatureT> FeatureEstimationT;
-typedef pcl::PointCloud<FeatureT> FeatureCloudT;
-typedef pcl::visualization::PointCloudColorHandlerCustom<PointNT> ColorHandlerT;
+typedef pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> ColorHandlerT;
+void computeNorm(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_ptr, pcl::PointCloud<pcl::Normal>::Ptr &normals_ptr)
+{
+  // =====【2】计算法线========创建法线估计类====================================
+  pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> ne;
+  ne.setInputCloud(cloud_ptr);
+  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>());
+  ne.setSearchMethod(tree); //设置近邻搜索算法
+  // 输出点云 带有法线描述
+  pcl::PointCloud<pcl::Normal> &normals = *normals_ptr;
+  // Use all neighbors in a sphere of radius 3cm
+  ne.setRadiusSearch(0.03); //半价内搜索临近点 3cm
+  // 计算表面法线特征
+  ne.compute(normals);
+}
+void computeFeature(pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_ptr, pcl::PointCloud<pcl::Normal>::Ptr &normals_ptr, pcl::PointCloud<pcl::FPFHSignature33>::Ptr &fe_ptr)
+{
+  pcl::FPFHEstimationOMP<pcl::PointXYZ, pcl::Normal, pcl::FPFHSignature33> fpfh;
+  fpfh.setInputCloud(cloud_ptr);
+  fpfh.setInputNormals(normals_ptr);
 
+  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree2(new pcl::search::KdTree<pcl::PointXYZ>());
+  fpfh.setSearchMethod(tree2); //设置近邻搜索算法
+  //注意：此处使用的半径必须要大于估计表面法线时使用的半径!!!
+  fpfh.setRadiusSearch(0.05);
+  //计算pfh特征值
+  fpfh.compute(*fe_ptr);
+
+  /*
+  fest.setRadiusSearch(5);
+  fest.setInputCloud(scene);
+  fest.setInputNormals(scene);
+  fest.compute(*scene_features);
+  */
+}
+void downSample(const float leaf, pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_ptr)
+{
+  // Downsample
+  pcl::VoxelGrid<pcl::PointXYZ> grid;
+  grid.setLeafSize(leaf, leaf, leaf);
+  grid.setInputCloud(cloud_ptr);
+  grid.filter(*cloud_ptr);
+}
 // Align a rigid object to a scene with clutter and occlusions
 int main(int argc, char **argv)
 {
   // Point clouds
-  PointCloudT::Ptr object(new PointCloudT);
-  PointCloudT::Ptr object_aligned(new PointCloudT);
-  PointCloudT::Ptr scene(new PointCloudT);
-  FeatureCloudT::Ptr object_features(new FeatureCloudT);
-  FeatureCloudT::Ptr scene_features(new FeatureCloudT);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr object(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr object_aligned(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr scene(new pcl::PointCloud<pcl::PointXYZ>);
 
   // Get input object and scene
   if (argc != 3)
@@ -40,8 +74,8 @@ int main(int argc, char **argv)
 
   // Load object and scene
   pcl::console::print_highlight("Loading point clouds...\n");
-  if (pcl::io::loadPCDFile<PointNT>(argv[1], *object) < 0 ||
-      pcl::io::loadPCDFile<PointNT>(argv[2], *scene) < 0)
+  if (pcl::io::loadPCDFile<pcl::PointXYZ>(argv[1], *object) < 0 ||
+      pcl::io::loadPCDFile<pcl::PointXYZ>(argv[2], *scene) < 0)
   {
     pcl::console::print_error("Error loading object/scene file!\n");
     return (1);
@@ -51,51 +85,39 @@ int main(int argc, char **argv)
        << pcl::getFieldsList(*object) << endl;
   cout << "scene\n"
        << pcl::getFieldsList(*scene) << endl;
-  cout << "object\n"
-       << object->points[77] << endl;
-  cout << "scene\n"
-       << scene->points[77] << endl;
 
-  // Downsample
-  pcl::console::print_highlight("Downsampling...\n");
-  pcl::VoxelGrid<PointNT> grid;
-  const float leaf = 0.005f;
-  grid.setLeafSize(leaf, leaf, leaf);
-  grid.setInputCloud(object);
-  grid.filter(*object);
-  grid.setLeafSize(3, 3, 3);
-  grid.setInputCloud(scene);
-  grid.filter(*scene);
+  pcl::console::print_highlight("Downsampling objec...\n");
+  downSample(0.1f, object);
+  pcl::console::print_highlight("Downsampling scene...\n");
+  downSample(3, scene);
 
   cout << "scene: " << scene->points.size() << ", " << object->points.size() << endl;
 
-  // Estimate normals for scene
+  // Estimate normals
   pcl::console::print_highlight("Estimating scene normals...\n");
-  pcl::NormalEstimationOMP<PointNT, PointNT> nest;
-  nest.setRadiusSearch(4);
-  nest.setInputCloud(scene);
-  nest.compute(*scene);
+  pcl::PointCloud<pcl::Normal>::Ptr scene_normals_ptr(new pcl::PointCloud<pcl::Normal>);
+  computeNorm(scene, scene_normals_ptr);
+
+  pcl::console::print_highlight("Estimating object normals...\n");
+  pcl::PointCloud<pcl::Normal>::Ptr object_normals_ptr(new pcl::PointCloud<pcl::Normal>);
+  computeNorm(object, object_normals_ptr);
 
   // Estimate features
-  pcl::console::print_highlight("Estimating features...\n");
-  FeatureEstimationT fest;
-  fest.setRadiusSearch(0.025);
-  fest.setInputCloud(object);
-  fest.setInputNormals(object);
-  fest.compute(*object_features);
+  pcl::console::print_highlight("Estimating  scene features...\n");
+  pcl::PointCloud<pcl::FPFHSignature33>::Ptr scene_fe_ptr(new pcl::PointCloud<pcl::FPFHSignature33>()); //fphf特征
+  computeFeature(scene, scene_normals_ptr, scene_fe_ptr);
 
-  fest.setRadiusSearch(5);
-  fest.setInputCloud(scene);
-  fest.setInputNormals(scene);
-  fest.compute(*scene_features);
+  pcl::console::print_highlight("Estimating  object features...\n");
+  pcl::PointCloud<pcl::FPFHSignature33>::Ptr object_fe_ptr(new pcl::PointCloud<pcl::FPFHSignature33>()); //fphf特征
+  computeFeature(object, object_normals_ptr, object_fe_ptr);
 
   // Perform alignment
   pcl::console::print_highlight("Starting alignment...\n");
-  pcl::SampleConsensusPrerejective<PointNT, PointNT, FeatureT> align;
+  pcl::SampleConsensusPrerejective<pcl::PointXYZ, pcl::Normal, pcl::FPFHSignature33> align;
   align.setInputSource(object);
-  align.setSourceFeatures(object_features);
+  align.setSourceFeatures(object_fe_ptr);
   align.setInputTarget(scene);
-  align.setTargetFeatures(scene_features);
+  align.setTargetFeatures(scene_fe_ptr);
   align.setMaximumIterations(50000);               // Number of RANSAC iterations
   align.setNumberOfSamples(3);                     // Number of points to sample for generating/prerejecting a pose
   align.setCorrespondenceRandomness(5);            // Number of nearest features to use

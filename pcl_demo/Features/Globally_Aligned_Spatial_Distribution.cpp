@@ -24,7 +24,8 @@ Globally Aligned Spatial Distribution (GASD) descriptors
 #include <pcl/visualization/cloud_viewer.h>//点云可视化
 #include <pcl/visualization/pcl_visualizer.h>// 高级可视化点云类
 #include <pcl/visualization/pcl_plotter.h>// 直方图的可视化 方法2
-#include <boost/thread/thread.hpp>
+#include <thread>
+
 using namespace std;
 // 别名
 typedef pcl::PointCloud<pcl::PointXYZ>  Cloud;
