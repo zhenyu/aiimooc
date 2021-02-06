@@ -22,7 +22,8 @@
 ./harris3d ../../Filtering/build/table_scene_lms400_inliers.pcd 
 */
 #include <iostream>//标准输入输出流
-#include <boost/thread/thread.hpp>
+#include <thread>
+
 #include <pcl/io/pcd_io.h>//PCL的PCD格式文件的输入输出头文件
 #include <pcl/visualization/pcl_visualizer.h>
 //#include <pcl/keypoints/narf_keypoint.h>//关键点检测
